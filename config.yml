@@ -1,0 +1,32 @@
+---
+# These patterns are used to identify dates in the document. The first
+# date in the document is used to rename the file to
+# `YYYY-MM-DD_original_filename.pdf`. Files which names start with a
+# date will remain untouched - this way you can easily correct wrong
+# dates. The original filename is preserved, as it is still part of
+# the resulting filename, as for some files it conveyes useful
+# information. This is not the case for scanned files, but please feel
+# free to rename those, while adhearing to the naming scheme.
+date_patterns:
+  - "\\d?\\d\\.\\d\\d\\.\\d\\d\\d\\d"
+  - "\\d?\\d\\. [A-Z][a-z]+ \\d\\d\\d\\d"
+
+
+default: archive
+
+# This is a list of rules. Each rule has a location (a path) and a
+# list of patterns (regexps). The content (text) of each document is
+# scored against each rule. Every matching pattern will increase the
+# score by 1. The resulting score is multiplied by 100. Then a score
+# rqual to the depth of the location is added. This is to break a tie
+# between rules in favour of the more specific location. The highest
+# score wins.
+rules:
+  - location: archive/work/payslips
+    patterns:
+      - payslip
+      - employer name
+  - location: archive/finance/bankstatements
+    patterns:
+      - bank name
+      - bank account statement

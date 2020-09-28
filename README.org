@@ -1,0 +1,50 @@
+#+begin_example
+  ___ | | ____| | ___   ___
+ / _ \| |/ / _` |/ _ \ / __|
+| (_) |   < (_| | (_) | (__
+ \___/|_|\_\__,_|\___/ \___|
+#+end_example
+
+* Welcome to =okdoc=
+
+This repo contains a document scanning and archiving solution. Given
+(scanned) PDF files, it will make them full-text searchable and sorts
+them based on rules.
+
+** Usage
+
+You can call =make= yourself, or...
+
+Just commit and push a PDF file to the documents repo and let the
+magic happen. (CI will do it for you.)
+
+** Sorting
+
+There is a Ruby script called =sort= which will move files in this
+repo based on rules defined in [[config.yml]]. Check this file for more
+information.
+
+** Setup another repo
+
+1. Create a new repo on Gitlab
+2. Add a new bot on Gitlab (Or use an existing bot for your context)
+3. Impersonate the bot
+4. Create a Access Token with all permissions
+5. Exit impersonation
+6. Make the bot a member of the new repo
+7. Make the pi-bot a member of the new repo if you want to use the scanner
+8. Got to "Project > Settings > CI / CD"
+9. Add variable CI_GIT_BOT with the bot's login
+10. Add variable CI_GIT_TOKEN with the bot's token (Protected and masked)
+12. Add everything from this repo except =.git=, pdf files, txt files
+13. Add, Commit and Push everything else to your new repo
+14. Adjust =DOCKER_TAG= in =Makefile=
+15. Run =make build-ci= to build and upload the customer runner
+16. Adjust image and bot name in =.gitlab-ci.yml=
+
+Additionally the repo needs to be configured with
+
+#+BEGIN_SRC shell
+git config merge.keepMine.name "always keep mine during merge"
+git config merge.keepMine.driver "true"
+#+END_SRC

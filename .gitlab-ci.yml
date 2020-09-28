@@ -1,0 +1,8 @@
+image: $DOCKER_TAG
+
+process:
+  script:
+    - make ci push
+  except:
+    variables:
+      - $GITLAB_USER_LOGIN =~ /200ok-bot/
