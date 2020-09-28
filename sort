@@ -32,7 +32,7 @@ def translate(date)
     .sub('Dezember', 'Dec')
 end
 
-CONFIG_PATH = File.expand_path('config.yml', __dir__)
+CONFIG_PATH = File.expand_path('../config.yml', __dir__)
 config = {}
 def load_config
   YAML.load(File.read(CONFIG_PATH))
