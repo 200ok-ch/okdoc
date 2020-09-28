@@ -21,9 +21,19 @@ doit:
 	git add .
 	make rename
 	git pull
-	make -k -j 6 textfiles
+	make -j 6 textfiles
 	git add .
-	./sort -ai
+	./okdoc/sort -ai
+
+.PHONY: install
+install:
+	([ ! -f config.yml ] && cp okdoc/config.yml .; true)
+	([ ! -f .gitlab-ci.yml ] && cp okdoc/.gitlab-ci.yml .; true)
+	cp okdoc/.gitattributes .
+	cd okdoc; bundle install; cd -
+	git init
+	git config merge.keepMine.name "always keep mine during merge"
+	git config merge.keepMine.driver "true"
 
 .PHONY: all
 all: rename textfiles # sort
@@ -60,7 +70,7 @@ textfiles-docker: build
 
 .PHONY: rename
 rename:
-	./rename.rb | /bin/sh
+	./okdoc/rename.rb | /bin/sh
 
 .PHONY: textfiles
 textfiles: $(TXTS)
@@ -69,7 +79,7 @@ textfiles: $(TXTS)
 .PHONY: ci
 ci: rename
 	make textfiles
-	./sort -ay
+	./okdoc/sort -ay
 
 %.txt: %.pdf $(OCRMYPDF) $(PDFTOTEXT)
 	# Only run ocrmypdf if the .txt file doesn't exist; independent if the timestamp is newer
@@ -79,7 +89,7 @@ ci: rename
 
 .PHONY: sort
 sort:
-	./sort
+	./okdoc/sort
 
 # ------------------------------ dependencies
 
@@ -99,9 +109,7 @@ $(PDFTOTEXT):
 
 # ------------------------------ ci-runner
 
-DOCKER_TAG ?= gitlab.200ok.ch:5050/munen/documents/ci-runner
-
 .PHONY: build-ci
 build-ci:
-	docker build -t $(DOCKER_TAG) .
-	docker push $(DOCKER_TAG)
+	cd okdoc; docker build -t $(DOCKER_TAG) .
+	cd okdoc; docker push $(DOCKER_TAG)

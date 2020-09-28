@@ -24,7 +24,15 @@ There is a Ruby script called =sort= which will move files in this
 repo based on rules defined in [[config.yml]]. Check this file for more
 information.
 
-** Setup another repo
+** Installation
+
+#+begin_src shell
+git submodule add git@github.com:200ok-ch/okdoc.git
+ln -s okdoc/Makefile Makefile
+make install
+#+end_src
+
+** Setup Gitlab CI
 
 1. Create a new repo on Gitlab
 2. Add a new bot on Gitlab (Or use an existing bot for your context)
@@ -36,15 +44,5 @@ information.
 8. Got to "Project > Settings > CI / CD"
 9. Add variable CI_GIT_BOT with the bot's login
 10. Add variable CI_GIT_TOKEN with the bot's token (Protected and masked)
-12. Add everything from this repo except =.git=, pdf files, txt files
-13. Add, Commit and Push everything else to your new repo
-14. Adjust =DOCKER_TAG= in =Makefile=
-15. Run =make build-ci= to build and upload the customer runner
-16. Adjust image and bot name in =.gitlab-ci.yml=
-
-Additionally the repo needs to be configured with
-
-#+BEGIN_SRC shell
-git config merge.keepMine.name "always keep mine during merge"
-git config merge.keepMine.driver "true"
-#+END_SRC
+11. Run ~DOCKER_TAG=gitlab.200ok.ch:5050/munen/documents/ci-runner make build-ci~ to build and upload the customer runner
+12. Adjust image and bot name in =.gitlab-ci.yml=
