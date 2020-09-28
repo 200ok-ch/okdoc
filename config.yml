@@ -14,6 +14,10 @@ date_patterns:
 
 default: archive
 
+filename_pattern: '^\d\d\d\d-\d\d-\d\d'
+
+file_glob: '**/*.pdf'
+
 # This is a list of rules. Each rule has a location (a path) and a
 # list of patterns (regexps). The content (text) of each document is
 # scored against each rule. Every matching pattern will increase the

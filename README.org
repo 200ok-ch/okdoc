@@ -42,7 +42,10 @@ make install
 6. Make the bot a member of the new repo
 7. Make the pi-bot a member of the new repo if you want to use the scanner
 8. Got to "Project > Settings > CI / CD"
-9. Add variable CI_GIT_BOT with the bot's login
-10. Add variable CI_GIT_TOKEN with the bot's token (Protected and masked)
-11. Run ~DOCKER_TAG=gitlab.200ok.ch:5050/munen/documents/ci-runner make build-ci~ to build and upload the customer runner
-12. Adjust image and bot name in =.gitlab-ci.yml=
+9. Run ~DOCKER_TAG=gitlab.200ok.ch:5050/200ok/documents/ci-runner make
+   build-ci~ to build and upload the customer CI runner (change the
+   name to what you want)
+10. Add variable CI_GIT_BOT with the bot's login
+11. Add variable DOCKER_TAG with the same DOCKER_TAG as in #9
+12. Add variable CI_GIT_TOKEN with the bot's token (Protected and masked)
+13. Adjust image and bot name in =.gitlab-ci.yml=
