@@ -23,7 +23,7 @@ doit:
 	git pull
 	make -j 6 textfiles
 	git add .
-	./okdoc/sort -ai
+	./okdoc/sort.rb -ai
 
 .PHONY: install
 install:
@@ -37,21 +37,6 @@ install:
 
 .PHONY: all
 all: rename textfiles # sort
-
-# --- this is what's called from register.sh
-.PHONY: push
-push: $(GIT)
-	# add files
-	$(GIT) add .
-	# re-write the log
-	echo "From $(HOSTNAME) at $(shell date -I)" > log.txt
-	$(GIT) status >> log.txt
-	$(GIT) log --name-status --oneline >> log.txt
-	$(GIT) add log.txt
-	# commit and push everything
-	$(GIT) commit -m "automatic commit via make from $(HOSTNAME)"
-	$(GIT) pull --no-edit origin ${CI_COMMIT_REF_NAME}
-	$(GIT) push || $(GIT) push "https://${CI_GIT_BOT}:$(CI_GIT_TOKEN)@$(REPO_URL)" "HEAD:$(CI_COMMIT_REF_NAME)"; true
 
 .PHONY: build
 build: Dockerfile
@@ -79,7 +64,7 @@ textfiles: $(TXTS)
 .PHONY: ci
 ci: rename
 	make textfiles
-	./okdoc/sort -ay
+	./okdoc/sort.rb -ay
 
 %.txt: %.pdf $(OCRMYPDF) $(PDFTOTEXT)
 	# Only run ocrmypdf if the .txt file doesn't exist; independent if the timestamp is newer
@@ -89,7 +74,28 @@ ci: rename
 
 .PHONY: sort
 sort:
-	./okdoc/sort
+	./okdoc/sort.rb
+
+# ------------------------------ register
+
+.PHONY: push
+push: $(GIT)
+	# add files
+	$(GIT) add .
+	# re-write the log
+	echo "From $(HOSTNAME) at $(shell date -I)" > log.txt
+	$(GIT) status >> log.txt
+	$(GIT) log --name-status --oneline >> log.txt
+	$(GIT) add log.txt
+	# commit and push everything
+	$(GIT) commit -m "automatic commit via make from $(HOSTNAME)"
+	$(GIT) pull --no-edit origin ${CI_COMMIT_REF_NAME}
+	$(GIT) push || $(GIT) push "https://${CI_GIT_BOT}:$(CI_GIT_TOKEN)@$(REPO_URL)" "HEAD:$(CI_COMMIT_REF_NAME)"; true
+
+# this target is called by the upload handler of pure-ftpd
+.PHONY: register
+register: push
+	aplay ./okdoc/register.wav
 
 # ------------------------------ dependencies
 
