@@ -14,6 +14,7 @@ OptionParser.new do |opts|
 
   opts.on('-a', '--act-immediately', 'Move files right away') { |d| options.doit = d }
   opts.on('-i', '--interactive', 'Run in interactive mode') { |i| options.interactive = i }
+  opts.on('-f', '--file FILE', 'Sort just one file') { |f| options.file = f; options.interactive = true }
   opts.on('-v', '--verbose', 'Run verbosely') { |v| options.verbose = v }
   opts.on('-y', '--yes', 'Auto approve') { |y| options.yes = y }
 end.parse!
@@ -41,7 +42,11 @@ config = load_config
 
 FILENAME_PATTERN = Regexp.new(config['filename_pattern']).freeze
 
-files = Dir.glob(config['file_glob'], File::FNM_CASEFOLD).sort
+if options.file
+  files = [options.file]
+else
+  files = Dir.glob(config['file_glob'], File::FNM_CASEFOLD).sort
+end
 
 actions = {}
 
