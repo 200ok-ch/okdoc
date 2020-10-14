@@ -1,0 +1,3 @@
+[submodule "okfiletags"]
+	path = okfiletags
+	url = git@github.com:200ok-ch/okfiletags.git

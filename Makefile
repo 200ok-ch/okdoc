@@ -33,6 +33,7 @@ doit:
 install:
 	([ ! -f config.yml ] && cp okdoc/config.yml .; true)
 	([ ! -f .gitlab-ci.yml ] && cp okdoc/.gitlab-ci.yml .; true)
+	([ ! -d okdoc/okfiletags ] && cd okdoc; git submodule add git@github.com:200ok-ch/okfiletags.git; true)
 	cp okdoc/.gitattributes .
 	cd okdoc; bundle install; cd -
 	git init
