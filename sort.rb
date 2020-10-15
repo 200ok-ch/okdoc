@@ -7,7 +7,7 @@ require 'tempfile'
 require 'yaml'
 require 'optparse'
 require 'ostruct'
-require './okdoc/oktags/lib/oktags'
+require 'oktags'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
