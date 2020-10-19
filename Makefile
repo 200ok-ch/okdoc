@@ -15,14 +15,18 @@ CI_COMMIT_REF_NAME ?= master
 
 HOSTNAME = $(shell hostname)
 
+# When auto-adding everything of the repo, only do it for documents,
+# not for logic/config/documentation.
+GIT_ADD = $(shell git add . -- ':!okdoc' ':!config.yml' ':!README.org')
+
 # --- default target ---
 .PHONY: doit
 doit:
-	git add .
+	$(GIT_ADD)
 	make rename
 	git pull
 	make -j 6 textfiles
-	git add .
+	$(GIT_ADD)
 	./okdoc/sort.rb -ai
 
 .PHONY: install
@@ -81,7 +85,7 @@ sort:
 .PHONY: push
 push: $(GIT)
 	# add files
-	$(GIT) add .
+	$(GIT_ADD)
 	# re-write the log
 	echo "From $(HOSTNAME) at $(shell date -I)" > log.txt
 	$(GIT) status >> log.txt
