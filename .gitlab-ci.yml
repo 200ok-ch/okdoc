@@ -5,6 +5,7 @@ process:
     - git submodule init
     - git config submodule.okdoc.url https://github.com/200ok-ch/okdoc.git
     - git submodule update
+    - (cd okdoc; bundle install)
     - ln -fs okdoc/Makefile Makefile
     - make ci push
   except:

@@ -7,6 +7,7 @@ require 'tempfile'
 require 'yaml'
 require 'optparse'
 require 'ostruct'
+require 'oktags'
 
 options = OpenStruct.new
 OptionParser.new do |opts|
@@ -195,10 +196,11 @@ files.each_with_index do |pdf, index|
           File.delete(pdf)
           File.delete(txt)
         when 't'
-          tags_string = cli.ask "Enter comma-separated tags: "
-          tags = tags_string.split(",").map { |t| t.gsub(' ', '') }
-          filename = "#{data['filename']}--#{tags.join(',')}"
-          file = File.join(data['path'], filename)
+          OK::Tags.list_pretty_tags('**/*pdf')
+          tags, pdf = OK::Tags.read_and_add_tags_for(pdf)
+          file = File.join(data['path'], File.basename(pdf, '.pdf'))
+          OK::Tags.add_tags_to_file(tags, txt)
+
           act(pdf, file)
         when 'x'
           # tear down
