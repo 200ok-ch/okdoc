@@ -68,7 +68,10 @@ textfiles: $(TXTS)
 .PHONY: ci
 ci: rename
 	make textfiles
-	./okdoc/sort.rb -ay
+  # Disabling for now, so that sorting is always explit and done by a
+  # human with the benefit of making sure that we know which documents
+  # are where.
+	# ./okdoc/sort.rb -ay
 
 %.txt: %.pdf $(OCRMYPDF) $(PDFTOTEXT)
 	# Only run ocrmypdf if the .txt file doesn't exist; independent if the timestamp is newer
