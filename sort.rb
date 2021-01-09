@@ -152,7 +152,9 @@ files.each_with_index do |pdf, index|
     else
       if options.interactive
         # become interactive, show the document
-        pid = spawn("evince #{pdf}")
+        pid = spawn("i3-msg exec 'evince #{File.expand_path(pdf)}'")
+        # Wait for evince to draw
+        spawn("i3-msg -t subscribe -m '[ \"window\" ]' | read")
 
         # show the calculated results
         yaml = YAML.dump(data)
@@ -162,7 +164,6 @@ files.each_with_index do |pdf, index|
         puts yaml
         puts
 
-        sleep 0.25 # That's just enough time for evince to show.
         # Don't focus on the new evince window, but the input prompt of `sort.
         `./okdoc/i3_focus_other.sh`
 
