@@ -151,25 +151,10 @@ files.each_with_index do |pdf, index|
       final = data
     else
       if options.interactive
-
-        # Search for the window running make or sort.rb to be able to
-        # focus on it later
-        terminal_win_id = `wmctrl -l | awk '/sort.rb|make/ {print $1}'`.chomp
-
         # become interactive, show the document
-        pid = spawn("evince #{pdf}")
-
-        # Wait for the window to open and grab its window ID
-        winid=""
-        until !winid.empty?
-          winid=`wmctrl -lp | awk -vpid=#{pid} '$3==pid {print $1; exit}'`
-        end
-
-        # Ensure evince window is on the right
-        `i3-msg move right`
-
-        # Don't focus on the new evince window, but the input prompt of `sort`.
-        `wmctrl -ia "#{terminal_win_id}"`
+        pid = spawn("i3-msg exec 'evince #{File.expand_path(pdf)}'")
+        # Wait for evince to draw
+        spawn("i3-msg -t subscribe -m '[ \"window\" ]' | read")
 
         # show the calculated results
         yaml = YAML.dump(data)
@@ -178,6 +163,9 @@ files.each_with_index do |pdf, index|
         puts "# [#{index}/#{files.count}] #{pdf}"
         puts yaml
         puts
+
+        # Don't focus on the new evince window, but the input prompt of `sort.
+        `./okdoc/i3_focus_other.sh`
 
         # ask what to do
         action = cli.ask('(A)ccept/(r)etry/(d)elete/(t)ag/e(x)it? ') do |q|
