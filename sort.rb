@@ -167,26 +167,15 @@ files.each_with_index do |pdf, index|
         `./okdoc/i3_focus_other.sh`
 
         # ask what to do
-        action = cli.ask('(A)ccept/(r)etry/(d)elete/(t)ag/e(x)it? ') do |q|
+        action = cli.ask('(A)ccept/(r)etry/(d)elete/(t)ag/(s)kip/e(x)it? ') do |q|
           q.default = 'A'
-          q.validate = /^[Ardtx]$/
+          q.validate = /^[Ardtsx]$/
         end
 
         case action
         when 'A'
           file = File.join(data['path'], data['filename'])
           act(pdf, file)
-        when 's'
-          puts 'TODO: skip'
-        # when 'e'
-        #   # edit
-        #   Tempfile.open(['document', '.yml']) do |f|
-        #     f.write(yaml)
-        #     f.close
-        #     # blocks
-        #     %x[emacs -nw #{f.path}]
-        #     final = YAML.load(File.read(f.path))
-        #   end
         when 'r'
           # TODO: reload config
           config = load_config
@@ -202,6 +191,9 @@ files.each_with_index do |pdf, index|
           OK::Tags.add_tags_to_file(tags, txt)
 
           act(pdf, file)
+        when 's'
+          # nop
+          nil
         when 'x'
           # tear down
           Process.kill('HUP', pid)
