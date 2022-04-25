@@ -35,7 +35,6 @@ install:
 	([ ! -f .gitlab-ci.yml ] && cp okdoc/.gitlab-ci.yml .; true)
 	cp okdoc/.gitattributes .
 	cd okdoc; bundle install; cd -
-	git init
 	git config merge.keepMine.name "always keep mine during merge"
 	git config merge.keepMine.driver "true"
 
