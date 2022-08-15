@@ -81,7 +81,8 @@ ci: rename
 
 .PHONY: sort
 sort:
-	./okdoc/sort.rb
+	# move file by file, interactively
+	./okdoc/sort.rb -ai
 
 # ------------------------------ register
 

@@ -236,7 +236,7 @@ end
 
 unless actions.empty? || options.doit
   puts YAML.dump(actions)
-  if options.yes || apply
+  if options.yes || (options.interactive && apply)
     actions.each do |pdf, file|
       act(pdf, file)
     end
