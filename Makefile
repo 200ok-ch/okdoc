@@ -46,7 +46,7 @@ build: Dockerfile
 	docker build -t okocr .
 
 .PHONY: textfiles-docker
-textfiles-docker: build
+textfiles-docker:
 	docker run --rm \
 	  -it \
 	  --name devtest \
