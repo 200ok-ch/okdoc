@@ -4,6 +4,8 @@
 # - CI_GIT_TOKEN
 # - DOCKER_TAG
 
+-include .env
+
 TLANG ?= deu
 
 PDFS = $(shell find . -name \*.pdf)
